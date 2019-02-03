@@ -416,6 +416,8 @@
     <ClInclude Include="..\core\Graphics\Command\asd.RenderingCommandHelper.h" />
     <ClInclude Include="..\core\Graphics\Helper\asd.EffekseerHelper.h" />
     <ClInclude Include="..\core\Graphics\Helper\asd.GifAnimationHelper.h" />
+    <ClInclude Include="..\core\Graphics\Media\asd.MediaPlayer.h" />
+    <ClInclude Include="..\core\Graphics\Media\Platform\asd.MediaPlayerWMF.h" />
     <ClInclude Include="..\core\Graphics\Platform\DX11\asd.DX11.Base.h" />
     <ClInclude Include="..\core\Graphics\Platform\DX11\asd.Graphics_Imp_DX11.h" />
     <ClInclude Include="..\core\Graphics\Platform\DX11\Resource\asd.CubemapTexture_Imp_DX11.h" />
@@ -545,6 +547,11 @@
     <ClInclude Include="..\core\IO\asd.StreamFile.h" />
     <ClInclude Include="..\core\IO\asd.StreamFile_Imp.h" />
     <ClInclude Include="..\core\IO\asd.BaseFile.h" />
+    <ClInclude Include="..\core\IO\StaticFile\asd.StaticFileCacheStore.h" />
+    <ClInclude Include="..\core\IO\StaticFile\asd.AsyncStaticFileFactory.h" />
+    <ClInclude Include="..\core\IO\StaticFile\asd.BlockingStaticFileFactory.h" />
+    <ClInclude Include="..\core\IO\StaticFile\asd.StaticFileFactoryBase.h" />
+    <ClInclude Include="..\core\IO\StaticFile\asd.StaticFileLoader.h" />
     <ClInclude Include="..\core\Log\asd.GetSpec.h" />
     <ClInclude Include="..\core\Log\asd.Log.h" />
     <ClInclude Include="..\core\Log\asd.Log_Imp.h" />
@@ -717,6 +724,8 @@
     <ClCompile Include="..\core\Graphics\Command\asd.RenderingCommandHelper.cpp" />
     <ClCompile Include="..\core\Graphics\Helper\asd.EffekseerHelper.cpp" />
     <ClCompile Include="..\core\Graphics\Helper\asd.GifAnimationHelper.cpp" />
+    <ClCompile Include="..\core\Graphics\Media\asd.MediaPlayer.cpp" />
+    <ClCompile Include="..\core\Graphics\Media\Platform\asd.MediaPlayerWMF.cpp" />
     <ClCompile Include="..\core\Graphics\Platform\DX11\asd.Graphics_Imp_DX11.cpp" />
     <ClCompile Include="..\core\Graphics\Platform\DX11\Resource\asd.CubemapTexture_Imp_DX11.cpp" />
     <ClCompile Include="..\core\Graphics\Platform\DX11\Resource\asd.DepthBuffer_Imp_DX11.cpp" />
@@ -763,6 +772,11 @@
     <ClCompile Include="..\core\IO\asd.PackFile.cpp" />
     <ClCompile Include="..\core\IO\asd.StaticFile_Imp.cpp" />
     <ClCompile Include="..\core\IO\asd.StreamFile_Imp.cpp" />
+    <ClCompile Include="..\core\IO\StaticFile\asd.AsyncStaticFileFactory.cpp" />
+    <ClCompile Include="..\core\IO\StaticFile\asd.BlockingStaticFileFactory.cpp" />
+    <ClCompile Include="..\core\IO\StaticFile\asd.StaticFileCacheStore.cpp" />
+    <ClCompile Include="..\core\IO\StaticFile\asd.StaticFileFactoryBase.cpp" />
+    <ClCompile Include="..\core\IO\StaticFile\asd.StaticFileLoader.cpp" />
     <ClCompile Include="..\core\Log\asd.Log_Imp.cpp" />
     <ClCompile Include="..\core\ObjectSystem\2D\asd.CoreChip2D_Imp.cpp" />
     <ClCompile Include="..\core\ObjectSystem\2D\asd.CoreCameraObject2D_Imp.cpp" />

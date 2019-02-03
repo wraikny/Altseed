@@ -4,12 +4,11 @@ import datetime
 import makeDocumentHtml
 import os
 import os.path
+import sys
 
-versionNumber = '110'
+versionNumber = '116'
 
-isToolExported = True
-if aceutils.isMac():
-	isToolExported = False
+leastCompileTarget = ''
 
 def getTargetDir(type):
 	common = 'Altseed_' + type.upper() + '_' + versionNumber
@@ -26,13 +25,31 @@ def init(type, targetDir):
 	aceutils.rmdir(targetDir)
 	aceutils.rmdir(r'Sample/BasicSample/sample_cs/obj')
 
-def compile(type):
+def compile_tool():
+	if(leastCompileTarget != 'cs'):
+		return
+
 	if aceutils.isWin():
+		aceutils.call(aceutils.cmd_compile + r'Dev/FontGenerator.sln /p:configuration=Release;platform=x86')
+		aceutils.call(aceutils.cmd_compile + r'Dev/FilePackageGenerator.sln /p:configuration=Release;platform=x86')
+		aceutils.call(aceutils.cmd_compile + r'Dev/ImagePackageGenerator.sln /p:configuration=Release;platform=x86')
 
-		if isToolExported:
-			aceutils.call(aceutils.cmd_compile + r'Dev/FontGeneratorWPF.sln /p:configuration=Release')
-			aceutils.call(aceutils.cmd_compile + r'Dev/FilePackageGenerator.sln /p:configuration=Release')
+	elif aceutils.isMac():
 
+		# for core
+		aceutils.cd(r'Dev/cmake')
+		aceutils.call(r'make install')
+		aceutils.cd(r'../../')
+
+		aceutils.call(r'nuget restore Dev/FontGenerator.sln -PackagesDirectory Dev/FontGenerator/packages/')
+		aceutils.call(r'msbuild Dev/FontGenerator/FontGenerator.Altseed/FontGenerator.Altseed.csproj /p:Configuration=Release /p:Platform=x86')
+		aceutils.call(r'msbuild Dev/FilePackageGenerator/FilePackageGenerator.Altseed/FilePackageGenerator.Altseed.csproj /p:Configuration=Release /p:Platform=x86')
+		aceutils.call(r'msbuild Dev/ImagePackageGenerator/ImagePackageGenerator/ImagePackageGenerator.csproj /p:Configuration=Release /p:Platform=x86')
+
+def compile(type):
+	global leastCompileTarget
+	leastCompileTarget = type
+	if aceutils.isWin():
 		if type=='cpp':
 			aceutils.call(aceutils.cmd_compile + r'Dev/unitTest_Engine_cpp.sln /p:configuration=Debug')
 			aceutils.call(aceutils.cmd_compile + r'Dev/unitTest_Engine_cpp.sln /p:configuration=Release')
@@ -72,48 +89,10 @@ def compile(type):
 			aceutils.call(r'ant')
 			aceutils.cd(r'../../')
 
-def copyTool(type, targetDir):
-	toolDir=targetDir+r'/Tool/'
+def copy_tools(type, targetDir):
+	toolDir=targetDir+r'/Tool'
 	aceutils.mkdir(toolDir)
-	if aceutils.isWin():
-		aceutils.copy(r'Dev/bin/FontGenerator.WPF.exe', toolDir)
-		aceutils.copy(r'Dev/bin/FontGenerator.WPF.exe.config', toolDir)
-		aceutils.copy(r'Dev/bin/FontGenerator.Model.dll', toolDir)
-		aceutils.copy(r'Dev/bin/FontGeneratorCore.dll', toolDir)
-		aceutils.copy(r'Dev/bin/nkf32.dll', toolDir)
-		aceutils.copy(r'Dev/bin/System.Reactive.Core.dll', toolDir)
-		aceutils.copy(r'Dev/bin/System.Reactive.Interfaces.dll', toolDir)
-		aceutils.copy(r'Dev/bin/System.Reactive.Linq.dll', toolDir)
-		aceutils.copy(r'Dev/bin/System.Reactive.PlatformServices.dll', toolDir)
-		
-		aceutils.copy(r'Dev/bin/ImagePackageGenerator.exe', toolDir)
-		aceutils.copy(r'Dev/bin/ImagePackageGenerator.exe.config', toolDir)
-		aceutils.copy(r'Dev/bin/PSDParser.dll', toolDir)
-
-		aceutils.copy(r'Dev/bin/FilePackageGenerator.exe', toolDir)
-		aceutils.copy(r'Dev/bin/FilePackageGenerator.GUI.exe', toolDir)
-		aceutils.copy(r'Dev/bin/FilePackageGenerator.GUI.exe.config', toolDir)
-		aceutils.copy(r'Dev/bin/FilePackageGeneratorCore.dll', toolDir)
-	elif aceutils.isMac():
-		aceutils.copy(r'Dev/bin/FontGenerator.GUI.exe', toolDir)
-		aceutils.copy(r'Dev/bin/FontGenerator.GUI.exe.config', toolDir)
-		aceutils.copy(r'Dev/bin/FontGenerator.Model.dll', toolDir)
-		aceutils.copy(r'Dev/bin/libFontGeneratorCore.dylib', toolDir)
-		aceutils.copy(r'Dev/bin/FontGenerator.exe', toolDir)
-		aceutils.copy(r'Dev/bin/FontGenerator.exe.config', toolDir)
-		aceutils.copy(r'Dev/bin/System.Reactive.Core.dll', toolDir)
-		aceutils.copy(r'Dev/bin/System.Reactive.Interfaces.dll', toolDir)
-		aceutils.copy(r'Dev/bin/System.Reactive.Linq.dll', toolDir)
-		aceutils.copy(r'Dev/bin/System.Reactive.PlatformServices.dll', toolDir)
-		
-		aceutils.copy(r'Dev/bin/ImagePackageGenerator.exe', toolDir)
-		aceutils.copy(r'Dev/bin/ImagePackageGenerator.exe.config', toolDir)
-		aceutils.copy(r'Dev/bin/libPSDParser.dylib', toolDir)
-
-		aceutils.copy(r'Dev/bin/FilePackageGenerator.exe', toolDir)
-		aceutils.copy(r'Dev/bin/FilePackageGenerator.GUI.exe', toolDir)
-		aceutils.copy(r'Dev/bin/FilePackageGenerator.GUI.exe.config', toolDir)
-		aceutils.copy(r'Dev/bin/FilePackageGeneratorCore.dll', toolDir)
+	aceutils.copytree(r'Altseed_Tool', toolDir, True)
 
 def makeDocument(type, targetDir,mode):
 	makeDocumentHtml.make_document_html(mode)
@@ -154,8 +133,48 @@ def release_common():
 		aceutils.rmdir(r'Dev/cmake')
 		aceutils.mkdir(r'Dev/cmake')
 		aceutils.cd(r'Dev/cmake')
-		aceutils.call(r'cmake -G "Unix Makefiles" -D CMAKE_BUILD_TYPE=Release -D BUILD_SHARED_LIBS:BOOL=OFF -D CMAKE_INSTALL_PREFIX:PATH=../ "-DCMAKE_OSX_ARCHITECTURES=x86_64;i386" ../')
+		aceutils.call(r'cmake -G "Unix Makefiles" -D CMAKE_BUILD_TYPE=Release -D BUILD_TOOL=ON -D BUILD_SHARED_LIBS:BOOL=OFF -D CMAKE_INSTALL_PREFIX:PATH=../ "-DCMAKE_OSX_ARCHITECTURES=x86_64;i386" ../')
 		aceutils.cd(r'../../')
+
+def store_tools():
+	aceutils.cdToScript()
+	aceutils.cd(r'../')
+	aceutils.call(sys.executable + r' Dev/generate_swig.py')
+
+	compile('cs')
+	compile_tool()
+
+	toolDir = 'Altseed_Tool'
+	aceutils.rmdir(toolDir)
+	aceutils.mkdir(toolDir)
+
+	aceutils.copy(r'Dev/bin/System.Reactive.dll', toolDir)
+	#aceutils.copy(r'Dev/bin/System.Windows.Interactivity.dll', toolDir)
+	aceutils.copy(r'Dev/bin/ReactiveProperty.dll', toolDir)
+	aceutils.copy(r'Dev/bin/ReactiveProperty.NET46.dll', toolDir)
+
+	aceutils.copy(r'Dev/bin/FontGenerator.exe', toolDir)
+	aceutils.copy(r'Dev/bin/FontGenerator.exe.config', toolDir)
+	aceutils.copy(r'Dev/bin/FontGenerator.Model.dll', toolDir)
+		
+	aceutils.copy(r'Dev/bin/ImagePackageGenerator.exe', toolDir)
+	aceutils.copy(r'Dev/bin/ImagePackageGenerator.exe.config', toolDir)
+
+	aceutils.copy(r'Dev/bin/FilePackageGenerator.exe', toolDir)
+	#aceutils.copy(r'Dev/bin/FilePackageGenerator.exe.config', toolDir)
+	aceutils.copy(r'Dev/bin/FilePackageGeneratorCore.dll', toolDir)
+
+	aceutils.copy(r'Dev/bin/Altseed.dll', toolDir)
+
+	if aceutils.isWin():
+		aceutils.copy(r'Dev/bin/Altseed_core.dll', toolDir)
+		aceutils.copy(r'Dev/bin/FontGeneratorCore.dll', toolDir)
+		aceutils.copy(r'Dev/bin/PSDParser.dll', toolDir)
+	elif aceutils.isMac():
+		aceutils.copy(r'Dev/bin/libAltseed_core.dylib', toolDir)
+		aceutils.copy(r'Dev/bin/libFontGeneratorCore.dylib', toolDir)
+		aceutils.copy(r'Dev/cmake/ImagePackageGenerator/bin/libPSDParser.dylib', toolDir)
+
 
 def release_cpp():
 	type = 'cpp'
@@ -168,8 +187,7 @@ def release_cpp():
 
 	aceutils.mkdir(targetDir+r'/')
 
-	if isToolExported:
-		copyTool(type, targetDir)
+	copy_tools(type, targetDir)
 
 	makeDocument(type, targetDir,'cpp')
 
@@ -181,7 +199,7 @@ def release_cpp():
 		sampleBinDir = sampleDir+r'bin/'
 		aceutils.mkdir(sampleDir)
 		aceutils.mkdir(sampleBinDir)
-		aceutils.copytreeWithExt(from_ + 'bin/',sampleBinDir,[ r'.h', r'.cpp', r'.filters', r'.config', r'.vcxproj', r'.cs', r'.csproj', r'.sln', r'.wav', r'.ogg', r'.png', r'.aip', r'.efk', r'.aff', r'.pack', r'.txt'])
+		aceutils.copytreeWithExt(from_ + 'bin/',sampleBinDir,[ r'.h', r'.cpp', r'.filters', r'.config', r'.vcxproj', r'.cs', r'.csproj', r'.sln', r'.wav', r'.ogg', r'.png', r'.mp4', r'.aip', r'.efk', r'.aff', r'.pack', r'.txt'])
 
 		aceutils.mkdir(sampleDir+r'cpp/')
 		aceutils.mkdir(sampleDir+r'cpp/include/')
@@ -205,7 +223,7 @@ def release_cpp():
 		aceutils.copy(from_+r'sample_cpp.sln',to_)
 
 		aceutils.mkdir(sampleDir+r'sample_cpp/')
-		aceutils.copytreeWithExt(from_ + r'sample_cpp/',sampleDir+r'sample_cpp/',[ r'.h', r'.cpp', r'.filters', r'.config', r'.vcxproj', r'.cs', r'.csproj', r'.sln', r'.wav', r'.ogg', r'.png', r'.aip', r'.efk', r'.aff', r'.pack', r'.txt'])
+		aceutils.copytreeWithExt(from_ + r'sample_cpp/',sampleDir+r'sample_cpp/',[ r'.h', r'.cpp', r'.filters', r'.config', r'.vcxproj', r'.cs', r'.csproj', r'.sln', r'.wav', r'.ogg', r'.png', r'.mp4', r'.aip', r'.efk', r'.aff', r'.pack', r'.txt'])
 
 	copySampleFiles(r'Sample/BasicSample/',targetDir+r'/Sample/BasicSample/')
 	copySampleFiles(r'Sample/ApplicationSample/',targetDir+r'/Sample/ApplicationSample/')
@@ -268,15 +286,13 @@ def release_cs():
 	init(type, targetDir)
 	
 	# GenerateHeader
-	aceutils.call(r'python Dev/generate_swig.py')
+	aceutils.call(sys.executable + r' Dev/generate_swig.py')
 	
 	compile(type)
 
 	aceutils.mkdir(targetDir+r'/')
 
-	if isToolExported:
-		copyTool(type, targetDir)
-
+	copy_tools(type, targetDir)
 
 	makeDocument(type, targetDir,'cs')
 
@@ -290,7 +306,7 @@ def release_cs():
 		aceutils.mkdir(sampleDir)
 		aceutils.mkdir(sampleBinDir)
 	
-		aceutils.copytreeWithExt(from_ + r'bin/',sampleBinDir,[ r'.h', r'.cpp', r'.filters', r'.config', r'.vcxproj', r'.cs', r'.csproj', r'.sln', r'.wav', r'.ogg', r'.png', r'.aip', r'.efk', r'.aff', r'.pack', r'.txt'])
+		aceutils.copytreeWithExt(from_ + r'bin/',sampleBinDir,[ r'.h', r'.cpp', r'.filters', r'.config', r'.vcxproj', r'.cs', r'.csproj', r'.sln', r'.wav', r'.ogg', r'.png', r'.mp4', r'.aip', r'.efk', r'.aff', r'.pack', r'.txt'])
 
 		if aceutils.isWin():
 			aceutils.copy(r'Dev/bin/Altseed_core.dll', sampleBinDir)
@@ -298,7 +314,7 @@ def release_cs():
 			aceutils.copy(r'Dev/bin/libAltseed_core.dylib', sampleBinDir)
 
 		aceutils.mkdir(sampleDir+r'sample_cs/')
-		aceutils.copytreeWithExt(from_ + r'sample_cs/',sampleDir+r'sample_cs/',[ r'.h', r'.cpp', r'.filters', r'.config', r'.vcxproj', r'.cs', r'.csproj', r'.sln', r'.wav', r'.ogg', r'.png', r'.aip', r'.efk', r'.aff', r'.pack', r'.txt'])
+		aceutils.copytreeWithExt(from_ + r'sample_cs/',sampleDir+r'sample_cs/',[ r'.h', r'.cpp', r'.filters', r'.config', r'.vcxproj', r'.cs', r'.csproj', r'.sln', r'.wav', r'.ogg', r'.png', r'.mp4', r'.aip', r'.efk', r'.aff', r'.pack', r'.txt'])
 
 		editCSFiles(sampleDir+r'sample_cs/')
 		
@@ -347,11 +363,11 @@ def release_java():
 	init(type, targetDir)
 
 	# GenerateHeader	
-	aceutils.call(r'python Dev/generate_swig.py java')
-	aceutils.call(r'python Script/generateTranslatedCode.py java')
+	aceutils.call(sys.executable + r' Dev/generate_swig.py java')
+	aceutils.call(sys.executable + r' Script/generateTranslatedCode.py java')
 		
 	# Sample
-	aceutils.call(r'python Script/generate_sample.py java')
+	aceutils.call(sys.executable + r' Script/generate_sample.py java')
 
 	aceutils.cd(r'Sample/BasicSample/sample_java/')
 	aceutils.call(r'ant')
@@ -366,8 +382,7 @@ def release_java():
 
 	aceutils.mkdir(targetDir+r'/')
 
-	if isToolExported:
-		copyTool(type, targetDir)
+	copy_tools(type, targetDir)
 
 	makeDocument(type, targetDir,'java')
 
@@ -382,7 +397,7 @@ def release_java():
 		aceutils.mkdir(sampleDir)
 		aceutils.mkdir(sampleBinDir)
 	
-		aceutils.copytreeWithExt(from_ + r'bin/',sampleBinDir,[ r'.jar', r'.wav', r'.ogg', r'.png', r'.aip', r'.efk', r'.aff', r'.pack', r'.txt'])
+		aceutils.copytreeWithExt(from_ + r'bin/',sampleBinDir,[ r'.jar', r'.wav', r'.ogg', r'.png', r'.mp4', r'.aip', r'.efk', r'.aff', r'.pack', r'.txt'])
 
 		if aceutils.isWin():
 			aceutils.copy(r'Dev/bin/Altseed_core.dll', sampleBinDir)
@@ -439,12 +454,14 @@ def release_java():
 
 	# Template
 
+
 release_common()
+
+store_tools()
+
 release_cpp()
 release_cs()
 release_java()
-
-
 
 
 

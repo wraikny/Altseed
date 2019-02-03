@@ -43,6 +43,7 @@ namespace asd {
 	class CubemapTexture;
 
 	class ImagePackage;
+	class MediaPlayer;
 
 	class Shader2D;
 	class Material2D;
@@ -284,6 +285,16 @@ namespace asd {
 		Hovered,	///< ボタンの時、マウスが重なっている状態で表示される
 	};
 
+	/**
+	@brief	ボタンの押し状態を示す列挙型
+	*/
+	enum class ButtonState : int32_t
+	{
+		Push,	///<	ボタンをこのフレームで押した状態
+		Release,	///<	ボタンをこのフレームで離した状態
+		Hold,	///<	ボタンを押し続けている状態
+		Free,	///<	ボタンを離し続けている状態
+	};
 
 
 	enum class Object2DType : int32_t
@@ -385,6 +396,50 @@ namespace asd {
 		@return	減算後の参照カウンタ
 		*/
 		virtual int Release() = 0;
+	};
+
+	/**
+		@brief	非同期読み込みの進捗
+	*/
+	enum class LoadState : int32_t
+	{
+		Loading,
+		WaitSync,
+		Loaded,
+		Failed
+	};
+
+	/**
+		@brief	ツールで表示するダイアログの種類
+	*/
+	enum class ToolDialogStyle {
+		Info,
+		Warning,
+		Error,
+		Question
+	};
+
+	/**
+		@brief	ツールで表示するダイアログのボタンの種類
+	*/
+	enum class ToolDialogButtons {
+		OK,
+		OKCancel,
+		YesNo,
+		Quit
+	};
+
+	/**
+		@brief	ツールで表示するダイアログの結果
+	*/
+	enum class ToolDialogSelection {
+		OK,
+		Cancel,
+		Yes,
+		No,
+		Quit,
+		None,
+		Error
 	};
 
 	//----------------------------------------------------------------------------------

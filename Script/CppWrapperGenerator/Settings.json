@@ -1,19 +1,38 @@
 {
-    "DoxygenXmlDirPath": "Doxygen_Core/xml/",
-    "ExportFilePath": "../../Dev/asd_cs/Wrappers.cs",
-    "ClassWhiteList":
-    [
-        "Sound",
-        "SoundSource",
-        "File",
-        "StaticFile",
-        "StreamFile",
-        "Tool"
-    ],
-    "ReleasableClassList":
-    [
-        "SoundSource",
-        "StaticFile",
-        "StreamFile"
-    ]
+  "DoxygenXmlDirPath": "../../Doxygen/Doxygen_Core/xml/",
+  "ExportDLLDirPath": "../Dev/asd_cpp/core/",
+  "ExportLibDirPath": "../Dev/asd_cpp/engine/",
+  "ClassWhiteList": [
+    "Sound",
+    "SoundSource",
+    "File",
+    "StaticFile",
+    "StreamFile",
+    "MediaPlayer",
+    "Tool"
+  ],
+  "ReleasableClassList": [
+    "SoundSource",
+    "StaticFile",
+    "StreamFile",
+    "MediaPlayer",
+  ],
+  "UnwrappedClassList": [
+    "Texture2D"
+  ],
+
+  "PrimitiveTypeList": [
+    "int",
+    "int32_t",
+    "void",
+    "float",
+    "bool",
+    "char16_t",
+    "Vector2DF",
+    "Vector2DI",
+    "int8_t"
+  ],
+  "FriendClassList": [
+    "Graphics"
+  ]
 }

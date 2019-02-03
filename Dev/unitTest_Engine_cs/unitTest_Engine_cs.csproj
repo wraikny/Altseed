@@ -46,8 +46,12 @@
   <ItemGroup>
     <Compile Include="Assert.cs" />
     <Compile Include="BugFix\AddObjectThenAddChild.cs" />
+    <Compile Include="BugFix\AsyncLoadAndSound.cs" />
     <Compile Include="BugFix\DisposeAndChangeParent.cs" />
     <Compile Include="BugFix\DisposeBug.cs" />
+    <Compile Include="BugFix\LoadAsyncFromCache.cs" />
+    <Compile Include="BugFix\LoadManyTexture.cs" />
+    <Compile Include="BugFix\LoadTextureFromPackage.cs" />
     <Compile Include="BugFix\ModifyObjectHavingDisposedChild.cs" />
     <Compile Include="BugFix\RepeatedlyAddAndRemoveObject.cs" />
     <Compile Include="Debug\Profiler.cs" />
@@ -71,6 +75,7 @@
     <Compile Include="Graphics\3D\Effect3D.cs" />
     <Compile Include="Graphics\3D\SimpleMesh.cs" />
     <Compile Include="Graphics\3D\TerrainObject3D.cs" />
+    <Compile Include="Graphics\Media\MediaPlayer.cs" />
     <Compile Include="Graphics\PostEffect\CustomPostEffect.cs" />
     <Compile Include="Graphics\PostEffect\PostEffectGaussinaBlur.cs" />
     <Compile Include="Graphics\PostEffect\PostEffectGrayScale.cs" />
@@ -80,6 +85,8 @@
     <Compile Include="Graphics\Transition\Transition.cs" />
     <Compile Include="Input\BundleController.cs" />
     <Compile Include="Input\MouseWithManyButtons.cs" />
+    <Compile Include="IO\StaticFile_LoadAsync.cs" />
+    <Compile Include="IO\StaticFile_LoadAsyncFromPackage.cs" />
     <Compile Include="IO\StaticFile_NonPackage.cs" />
     <Compile Include="IO\StaticFile_Package.cs" />
     <Compile Include="Debug\Log.cs" />

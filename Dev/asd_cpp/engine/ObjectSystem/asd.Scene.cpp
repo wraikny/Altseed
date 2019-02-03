@@ -1,5 +1,7 @@
 ﻿#include <exception>
 #include <list>
+#include <algorithm>
+
 #include "asd.Scene.h"
 #include "../asd.Engine.h"
 #include "Registration/asd.RegistrationCommand.h"
@@ -15,8 +17,8 @@ namespace asd
 	//
 	//----------------------------------------------------------------------------------
 	Scene::Scene()
-		: m_layersToDraw(list<Layer::Ptr>())
-		, m_layersToUpdate(list<Layer::Ptr>())
+		: m_layersToDraw(std::vector<Layer::Ptr>())
+		, m_layersToUpdate(std::vector<Layer::Ptr>())
 		, m_coreScene(nullptr)
 		, alreadyFirstUpdate(false)
 		, m_componentManager(std::make_shared<ComponentManager<SceneComponent>>(this))
@@ -65,7 +67,7 @@ namespace asd
 
 	void Scene::Update()
 	{
-		m_layersToUpdate.sort([](const Layer::Ptr& x, const Layer::Ptr& y) -> bool
+		std::stable_sort(m_layersToUpdate.begin(), m_layersToUpdate.end(), [](const Layer::Ptr& x, const Layer::Ptr& y) -> bool
 		{
 			return x->GetUpdatePriority() < y->GetUpdatePriority();
 		});
@@ -97,7 +99,7 @@ namespace asd
 
 	void Scene::Draw()
 	{
-		m_layersToDraw.sort([](const Layer::Ptr& x, const Layer::Ptr& y) -> bool
+		std::stable_sort(m_layersToDraw.begin(), m_layersToDraw.end(),[](const Layer::Ptr& x, const Layer::Ptr& y) -> bool
 		{
 			return x->GetDrawingPriority() < y->GetDrawingPriority();
 		});
@@ -257,8 +259,8 @@ namespace asd
 		}
 
 		layer->SetScene(nullptr);
-		m_layersToDraw.remove(layer);
-		m_layersToUpdate.remove(layer);
+		m_layersToDraw.erase(std::remove(m_layersToDraw.begin(), m_layersToDraw.end(), layer), m_layersToDraw.end());
+		m_layersToUpdate.erase(std::remove(m_layersToUpdate.begin(), m_layersToUpdate.end(), layer), m_layersToUpdate.end());
 		m_coreScene->RemoveLayer(layer->GetCoreLayer().get());
 	}
 
@@ -312,7 +314,7 @@ namespace asd
 		return CreateSharedPtrWithReleaseDLL(target);
 	}
 
-	const std::list<Layer::Ptr>& Scene::GetLayers() const
+	const std::vector<Layer::Ptr>& Scene::GetLayers() const
 	{
 		return m_layersToUpdate;
 	}

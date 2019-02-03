@@ -1,31 +1,42 @@
-# Debug Release‚ÉŒÀ’è
+# Limit to Debug Release
 set(CMAKE_CONFIGURATION_TYPES Debug Release CACHE TYPE INTERNAL FORCE )
 
-# ƒvƒƒWƒFƒNƒg–¼
+# Project name
 project(Altseed)
 
-# CMake ƒo[ƒWƒ‡ƒ“ƒ`ƒFƒbƒN
+# Option
+option(BUILD_TOOL "Build tool" OFF)
+
+# Check CMake Version
 if (MSVC)
-cmake_minimum_required(VERSION 2.8.11)
+cmake_minimum_required(VERSION 3.1)
 else()
-cmake_minimum_required(VERSION 2.8)
+cmake_minimum_required(VERSION 3.1)
 endif()
 
-# MSVCŒü‚¯İ’è
+# C++11
+set (CMAKE_CXX_STANDARD 11)
+
+# For MSVC
 if (MSVC)
 	option(USE_MSVC_RUNTIME_LIBRARY_DLL "Use MSVC runtime library DLL" OFF)
 endif()
 
-# ƒRƒ“ƒpƒCƒ‹İ’è
+# For Apple
+if(APPLE)
+	set(CMAKE_OSX_DEPLOYMENT_TARGET 10.12)
+endif()
+
+# Add flags
 if (MSVC)
-	# “Á‚É‰½‚à
+	# Nothing
 else()
-	set(CMAKE_CXX_FLAGS "-std=c++11 -fPIC -fpermissive" ${CMAKE_CXX_FLAGS})
-	set(CMAKE_C_FLAGS "-fPIC" ${CMAKE_C_FLAGS})
+	set(CMAKE_CXX_FLAGS " -fPIC -fpermissive ${CMAKE_CXX_FLAGS}")
+	set(CMAKE_C_FLAGS "-fPIC ${CMAKE_C_FLAGS}")
 
 endif()
 
-# Effekseer‚Ìİ’è
+# Effekseerã®è¨­å®š
 if (APPLE)
 	option(USE_GLEW_STATIC "Use Glew static library" OFF)
 	option(USE_GLEW_DLL "Use Glew DLL" OFF)
@@ -37,12 +48,11 @@ endif()
 option(USE_OPENGLES2 "Use OpenGL ES2" OFF)
 option(USE_INTERNAL_LOADER "Use Internal Loader" ON)
 
-# ƒtƒ@ƒCƒ‹‚ğƒ\[ƒXƒŠƒXƒg‚É’Ç‰Á
+# ãƒ•ã‚¡ã‚¤ãƒ«ã‚’ã‚½ãƒ¼ã‚¹ãƒªã‚¹ãƒˆã«è¿½åŠ 
 INCLUDE(CMakeFiles.txt)
 
 add_subdirectory(asd_cpp/common/)
 add_subdirectory(asd_cpp/tool/)
-
 
 # ======== Core ========
 
@@ -123,6 +133,15 @@ FILE(GLOB core_root_srcs
 	asd_cpp/core/*.h
 )
 
+if(${CMAKE_SYSTEM_NAME} MATCHES "Darwin")
+FILE(GLOB_RECURSE core_mac_srcs
+	asd_cpp/core/Graphics/*.mm
+)
+
+list(APPEND core_srcs ${core_mac_srcs})
+
+endif()
+
 list(APPEND core_srcs ${core_root_srcs} ${third_srcs})
 
 foreach(FILE ${core_srcs}) 
@@ -152,7 +171,7 @@ endforeach()
 # ======== ==== ========
 
 
-# ƒCƒ“ƒNƒ‹[ƒh‚Ìİ’è
+# ã‚¤ãƒ³ã‚¯ãƒ«ãƒ¼ãƒ‰ã®è¨­å®š
 include_directories(
 	include/
 	include/freetype/
@@ -161,10 +180,10 @@ include_directories(
 	asd_cpp/core/
 	)
 
-#ƒ‰ƒCƒuƒ‰ƒŠ‚Ìİ’è
+#ãƒ©ã‚¤ãƒ–ãƒ©ãƒªã®è¨­å®š
 link_directories(${PROJECT_SOURCE_DIR}/lib/)
 
-# ƒpƒbƒP[ƒW‚Ìİ’è
+# ãƒ‘ãƒƒã‚±ãƒ¼ã‚¸ã®è¨­å®š
 set(common_lib)
 set(common_inc)
 
@@ -173,7 +192,7 @@ if(MSVC)
 else()
 	list(APPEND common_lib glfw3 )
 	if(NOT APPLE)
-		# Mac‚Å‚ÍGLEW•sg—p
+		# Macã§ã¯GLEWä¸ä½¿ç”¨
 		list(APPEND common_lib GLEW )
 	endif()
 	list(APPEND common_lib png16 )
@@ -280,15 +299,17 @@ else()
 			${OPENGL_glu_LIBRARY}
 			${IOKIT_FRAMEWORK}
 			${CORE_FOUNDATION_FRAMEWORK}
-			${CORE_VIDEO_FRAMEWORK})
+			${CORE_VIDEO_FRAMEWORK}
+			"-framework AVFoundation"
+			"-framework CoreMedia")
 	endif()
 
 endif()
 
-# ‹¤’ÊƒCƒ“ƒNƒ‹[ƒh‚Ì’Ç‰Á
+# å…±é€šã‚¤ãƒ³ã‚¯ãƒ«ãƒ¼ãƒ‰ã®è¿½åŠ 
 include_directories( AFTER SYSTEM ${common_inc} )
 
-# ƒRƒ“ƒpƒCƒ‹æ‚ğ’Ç‰Á
+# ã‚³ãƒ³ãƒ‘ã‚¤ãƒ«å…ˆã‚’è¿½åŠ 
 #add_library( asdCommon STATIC ${common_src} )
 
 add_library( asdCore STATIC ${core_srcs} )
@@ -301,7 +322,7 @@ add_library( asdEngine STATIC ${engine_src} ${common_to_engine_src} )
 add_library( FontGeneratorCore SHARED ${fontGenerator_src} )
 target_link_libraries(FontGeneratorCore asd_tool asd_common ${common_lib}) 
 
-# o—Íæ‚Ìİ’è
+# å‡ºåŠ›å…ˆã®è¨­å®š
 set_target_properties(asdCore PROPERTIES ARCHIVE_OUTPUT_DIRECTORY "lib/" )
 set_target_properties(asdCore PROPERTIES LIBRARY_OUTPUT_DIRECTORY "lib/" )
 
@@ -335,7 +356,7 @@ else()
 set_target_properties(asdEngine PROPERTIES OUTPUT_NAME "Altseed" )
 endif()
 
-# ƒtƒ‰ƒOˆ—
+# ãƒ•ãƒ©ã‚°å‡¦ç†
 if (MSVC)
 	if (NOT USE_MSVC_RUNTIME_LIBRARY_DLL)
 		foreach (flag CMAKE_C_FLAGS
@@ -355,12 +376,12 @@ if (MSVC)
 	endif()
 endif()
 
-# ƒRƒ“ƒpƒCƒ‰æ“¾
+# ã‚³ãƒ³ãƒ‘ã‚¤ãƒ©å–å¾—
 if (MSVC)
 	add_definitions(-D_$(PlatformToolset))
 endif()
 
-# Effekseer‚Ìİ’è
+# Effekseerã®è¨­å®š
 if (USE_INTERNAL_LOADER)
 	add_definitions(-D__EFFEKSEER_RENDERER_INTERNAL_LOADER__)
 endif()
@@ -385,7 +406,7 @@ if (USE_OPENGL3)
 	add_definitions(-D__EFFEKSEER_RENDERER_GL3__)
 endif()
 
-# ƒCƒ“ƒXƒg[ƒ‹æ‚ğŒˆ’è
+# ã‚¤ãƒ³ã‚¹ãƒˆãƒ¼ãƒ«å…ˆã‚’æ±ºå®š
 install(
 	TARGETS asdCore
 	ARCHIVE DESTINATION lib
@@ -411,3 +432,15 @@ install(
 # Tests
 add_subdirectory(unitTest_cpp_gtest/)
 add_subdirectory(unitTest_Engine_cpp_gtest/)
+
+# Tool
+if (BUILD_TOOL)
+	add_subdirectory(ImagePackageGenerator/)
+	set_target_properties(PSDParser PROPERTIES LIBRARY_OUTPUT_DIRECTORY "bin/" )
+
+endif()
+
+if (BUILD_TOOL_3D)
+	add_subdirectory(FBX2MDL/)
+endif()
+

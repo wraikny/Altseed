@@ -24,7 +24,7 @@ namespace unitTest_Engine_cs
 		//[STAThread]
 		static void Main(string[] args)
 		{
-			TestOnAllDevice(typeof(Tool.Basic));
+			TestOnAllDevice(typeof(Graphics._2D.EffectObject2D));
             Console.ReadKey();
 			return;
 
@@ -96,7 +96,6 @@ namespace unitTest_Engine_cs
 			}
 			catch(Exception e)
 			{
-				Console.WriteLine(e.ToString());
 				return e;
 			}
 		}

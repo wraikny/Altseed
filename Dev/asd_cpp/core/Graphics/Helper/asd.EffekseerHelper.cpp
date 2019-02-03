@@ -222,7 +222,9 @@ namespace asd
 		auto f = graphics->GetFile()->CreateStaticFile((const achar*)path);
 		if (f != nullptr)
 		{
-			return new EffekseerFileReader(f->GetBuffer());
+			auto ret = new EffekseerFileReader(f->GetBuffer());
+			SafeRelease(f);
+			return ret;
 		}
 		else
 		{
@@ -794,6 +796,7 @@ namespace asd
 				g,
 				EffekseerRendererDX11::CreateTextureLoader(
 					(ID3D11Device*)g->GetRHI()->GetInternalObjects()[0],
+					(ID3D11DeviceContext*)g->GetRHI()->GetInternalObjects()[1],
 					fileInterface));
 		}
 

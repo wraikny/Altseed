@@ -207,6 +207,10 @@ namespace asd
 	//----------------------------------------------------------------------------------
 	bool Core_Imp::Initialize(const achar* title, int32_t width, int32_t height, CoreOption option)
 	{
+#if DEBUG
+		printf("Debug版Altseedを使用しています\n");
+#endif
+
 		if (m_window != nullptr) return false;
 		if (m_keyboard != nullptr) return false;
 		if (m_mouse != nullptr) return false;
@@ -280,7 +284,8 @@ namespace asd
 		m_mouse = Mouse_Imp::Create(m_window);
 		m_joystickContainer = JoystickContainer_Imp::Create(m_window);
 
-		m_file = File_Imp::Create();
+		synchronizer = std::make_shared<Synchronizer>();
+		m_file = File_Imp::Create(synchronizer);
 		m_graphics = Graphics_Imp::Create(m_window, option.GraphicsDevice, m_logger, m_file, go);
 
 		if (m_graphics == nullptr) return false;
@@ -301,8 +306,6 @@ namespace asd
 
 		layerRenderer = new LayerRenderer(m_graphics);
 		layerRenderer->SetWindowSize(m_windowSize);
-
-		synchronizer = std::make_shared<Synchronizer>();
 
 		{
 			asd::Vector2DF lpos[4];
@@ -345,6 +348,10 @@ namespace asd
 	//----------------------------------------------------------------------------------
 	bool Core_Imp::InitializeByExternalWindow(void* handle1, void* handle2, int32_t width, int32_t height, CoreOption option)
 	{
+#if DEBUG
+		printf("Debug版Altseedを使用しています\n");
+#endif
+
 		if (m_window != nullptr) return false;
 		if (m_keyboard != nullptr) return false;
 		if (m_mouse != nullptr) return false;
@@ -362,7 +369,8 @@ namespace asd
 		}
 #endif
 
-		m_file = File_Imp::Create();
+		synchronizer = std::make_shared<Synchronizer>();
+		m_file = File_Imp::Create(synchronizer);
 		m_logger = Log_Imp::Create(ToAString("Log.html").c_str(), ToAString(L"").c_str());
 
 		GraphicsOption go;
@@ -387,8 +395,6 @@ namespace asd
 		m_windowSize = Vector2DI(width, height);
 		layerRenderer = new LayerRenderer(m_graphics);
 		layerRenderer->SetWindowSize(m_windowSize);
-
-		synchronizer = std::make_shared<Synchronizer>();
 
 		{
 			asd::Vector2DF lpos[4];

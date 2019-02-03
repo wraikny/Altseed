@@ -314,6 +314,29 @@ namespace asd {
 	}
 
 	/// <summary>
+	/// ボタンの押し状態を示す列挙型 
+	///	</summary>
+	public enum ButtonState : int
+	{
+		/// <summary>
+		/// ボタンをこのフレームで押した状態 
+		/// </summary>
+		Push = asd.swig.ButtonState.Push,
+		/// <summary>
+		/// ボタンをこのフレームで離した状態 
+		/// </summary>
+		Release = asd.swig.ButtonState.Release,
+		/// <summary>
+		/// ボタンを押し続けている状態 
+		/// </summary>
+		Hold = asd.swig.ButtonState.Hold,
+		/// <summary>
+		/// ボタンを離し続けている状態 
+		/// </summary>
+		Free = asd.swig.ButtonState.Free,
+	}
+
+	/// <summary>
 	/// 
 	///	</summary>
 	public enum Object2DType : int
@@ -463,6 +486,110 @@ namespace asd {
 		/// 
 		/// </summary>
 		Occlusion = asd.swig.VisualizedBufferType.Occlusion,
+	}
+
+	/// <summary>
+	/// 非同期読み込みの進捗 
+	///	</summary>
+	public enum LoadState : int
+	{
+		/// <summary>
+		/// 
+		/// </summary>
+		Loading = asd.swig.LoadState.Loading,
+		/// <summary>
+		/// 
+		/// </summary>
+		WaitSync = asd.swig.LoadState.WaitSync,
+		/// <summary>
+		/// 
+		/// </summary>
+		Loaded = asd.swig.LoadState.Loaded,
+		/// <summary>
+		/// 
+		/// </summary>
+		Failed = asd.swig.LoadState.Failed,
+	}
+
+	/// <summary>
+	/// ツールで表示するダイアログの種類 
+	///	</summary>
+	public enum ToolDialogStyle : int
+	{
+		/// <summary>
+		/// 
+		/// </summary>
+		Info = asd.swig.ToolDialogStyle.Info,
+		/// <summary>
+		/// 
+		/// </summary>
+		Warning = asd.swig.ToolDialogStyle.Warning,
+		/// <summary>
+		/// 
+		/// </summary>
+		Error = asd.swig.ToolDialogStyle.Error,
+		/// <summary>
+		/// 
+		/// </summary>
+		Question = asd.swig.ToolDialogStyle.Question,
+	}
+
+	/// <summary>
+	/// ツールで表示するダイアログのボタンの種類 
+	///	</summary>
+	public enum ToolDialogButtons : int
+	{
+		/// <summary>
+		/// 
+		/// </summary>
+		OK = asd.swig.ToolDialogButtons.OK,
+		/// <summary>
+		/// 
+		/// </summary>
+		OKCancel = asd.swig.ToolDialogButtons.OKCancel,
+		/// <summary>
+		/// 
+		/// </summary>
+		YesNo = asd.swig.ToolDialogButtons.YesNo,
+		/// <summary>
+		/// 
+		/// </summary>
+		Quit = asd.swig.ToolDialogButtons.Quit,
+	}
+
+	/// <summary>
+	/// ツールで表示するダイアログの結果 
+	///	</summary>
+	public enum ToolDialogSelection : int
+	{
+		/// <summary>
+		/// 
+		/// </summary>
+		OK = asd.swig.ToolDialogSelection.OK,
+		/// <summary>
+		/// 
+		/// </summary>
+		Cancel = asd.swig.ToolDialogSelection.Cancel,
+		/// <summary>
+		/// 
+		/// </summary>
+		Yes = asd.swig.ToolDialogSelection.Yes,
+		/// <summary>
+		/// 
+		/// </summary>
+		No = asd.swig.ToolDialogSelection.No,
+		/// <summary>
+		/// 
+		/// </summary>
+		Quit = asd.swig.ToolDialogSelection.Quit,
+		/// <summary>
+		/// 
+		/// </summary>
+		None = asd.swig.ToolDialogSelection.None,
+		/// <summary>
+		/// 
+		/// </summary>
+		Error = asd.swig.ToolDialogSelection.Error,
 	}
 
 	/// <summary>
@@ -642,29 +769,6 @@ namespace asd {
 		/// 
 		/// </summary>
 		Max = asd.swig.JoystickAxisType.Max,
-	}
-
-	/// <summary>
-	/// ジョイスティックのボタンの押し状態を示す列挙型 
-	///	</summary>
-	public enum JoystickButtonState : int
-	{
-		/// <summary>
-		/// ボタンをこのフレームで押した状態 
-		/// </summary>
-		Push = asd.swig.JoystickButtonState.Push,
-		/// <summary>
-		/// ボタンをこのフレームで離した状態 
-		/// </summary>
-		Release = asd.swig.JoystickButtonState.Release,
-		/// <summary>
-		/// ボタンを押し続けている状態 
-		/// </summary>
-		Hold = asd.swig.JoystickButtonState.Hold,
-		/// <summary>
-		/// ボタンを離し続けている状態 
-		/// </summary>
-		Free = asd.swig.JoystickButtonState.Free,
 	}
 
 	/// <summary>
@@ -1167,29 +1271,6 @@ namespace asd {
 	}
 
 	/// <summary>
-	/// キーボードの押下状態を示す列挙型 
-	///	</summary>
-	public enum KeyState : int
-	{
-		/// <summary>
-		/// キーをこのフレームで押した状態 
-		/// </summary>
-		Push = asd.swig.KeyState.Push,
-		/// <summary>
-		/// キーをこのフレームで離した状態 
-		/// </summary>
-		Release = asd.swig.KeyState.Release,
-		/// <summary>
-		/// キーを押し続けている状態 
-		/// </summary>
-		Hold = asd.swig.KeyState.Hold,
-		/// <summary>
-		/// キーを離し続けている状態 
-		/// </summary>
-		Free = asd.swig.KeyState.Free,
-	}
-
-	/// <summary>
 	/// マウスのボタン一覧を示す列挙型 
 	///	</summary>
 	public enum MouseButtons : int
@@ -1226,29 +1307,6 @@ namespace asd {
 		/// サブボタン5 
 		/// </summary>
 		SubButton5 = asd.swig.MouseButtons.SubButton5,
-	}
-
-	/// <summary>
-	/// マウスボタンの押し状態を示す列挙型 
-	///	</summary>
-	public enum MouseButtonState : int
-	{
-		/// <summary>
-		/// ボタンをこのフレームで押した状態 
-		/// </summary>
-		Push = asd.swig.MouseButtonState.Push,
-		/// <summary>
-		/// ボタンをこのフレームで離した状態 
-		/// </summary>
-		Release = asd.swig.MouseButtonState.Release,
-		/// <summary>
-		/// ボタンを押し続けている状態 
-		/// </summary>
-		Hold = asd.swig.MouseButtonState.Hold,
-		/// <summary>
-		/// ボタンを離し続けている状態 
-		/// </summary>
-		Free = asd.swig.MouseButtonState.Free,
 	}
 
 	/// <summary>
@@ -1326,87 +1384,6 @@ namespace asd {
 		/// 多角形 
 		/// </summary>
 		PolygonShape = asd.swig.ShapeType.PolygonShape,
-	}
-
-	/// <summary>
-	/// 
-	///	</summary>
-	public enum ToolDialogStyle : int
-	{
-		/// <summary>
-		/// 
-		/// </summary>
-		Info = asd.swig.ToolDialogStyle.Info,
-		/// <summary>
-		/// 
-		/// </summary>
-		Warning = asd.swig.ToolDialogStyle.Warning,
-		/// <summary>
-		/// 
-		/// </summary>
-		Error = asd.swig.ToolDialogStyle.Error,
-		/// <summary>
-		/// 
-		/// </summary>
-		Question = asd.swig.ToolDialogStyle.Question,
-	}
-
-	/// <summary>
-	/// 
-	///	</summary>
-	public enum ToolDialogButtons : int
-	{
-		/// <summary>
-		/// 
-		/// </summary>
-		OK = asd.swig.ToolDialogButtons.OK,
-		/// <summary>
-		/// 
-		/// </summary>
-		OKCancel = asd.swig.ToolDialogButtons.OKCancel,
-		/// <summary>
-		/// 
-		/// </summary>
-		YesNo = asd.swig.ToolDialogButtons.YesNo,
-		/// <summary>
-		/// 
-		/// </summary>
-		Quit = asd.swig.ToolDialogButtons.Quit,
-	}
-
-	/// <summary>
-	/// 
-	///	</summary>
-	public enum ToolDialogSelection : int
-	{
-		/// <summary>
-		/// 
-		/// </summary>
-		OK = asd.swig.ToolDialogSelection.OK,
-		/// <summary>
-		/// 
-		/// </summary>
-		Cancel = asd.swig.ToolDialogSelection.Cancel,
-		/// <summary>
-		/// 
-		/// </summary>
-		Yes = asd.swig.ToolDialogSelection.Yes,
-		/// <summary>
-		/// 
-		/// </summary>
-		No = asd.swig.ToolDialogSelection.No,
-		/// <summary>
-		/// 
-		/// </summary>
-		Quit = asd.swig.ToolDialogSelection.Quit,
-		/// <summary>
-		/// 
-		/// </summary>
-		None = asd.swig.ToolDialogSelection.None,
-		/// <summary>
-		/// 
-		/// </summary>
-		Error = asd.swig.ToolDialogSelection.Error,
 	}
 
 	/// <summary>
@@ -1565,6 +1542,21 @@ namespace asd {
 			return CoreInstance.CalcTextureSize(text, (asd.swig.WritingDirection)writingDirection);
 		}
 
+		/// <summary>
+		/// 指定した文字の代わりに画像を表示する組み合わせを追加する。 
+		/// </summary>
+		/// <param name="c">文字 </param>
+		/// <param name="texture">画像 </param>
+		public void AddImageGlyph(string c, Texture2D texture)
+		{
+			asd.swig.Texture2D textureCore = null;
+			if(texture != null)
+			{
+				textureCore = texture.CoreInstance;
+			}
+			CoreInstance.AddImageGlyph(c, textureCore);
+		}
+
 	}
 
 
@@ -1699,9 +1691,9 @@ namespace asd {
 		/// </summary>
 		/// <param name="at">何番目のボタンの押し状態を取得するか </param>
 		/// <returns>押し状態 </returns>
-		public JoystickButtonState GetButtonState(int at)
+		public ButtonState GetButtonState(int at)
 		{
-			return (asd.JoystickButtonState)CoreInstance.GetButtonState(at);
+			return (asd.ButtonState)CoreInstance.GetButtonState(at);
 		}
 
 		/// <summary>
@@ -1709,9 +1701,9 @@ namespace asd {
 		/// </summary>
 		/// <param name="type">ボタンの種類 </param>
 		/// <returns>押し状態 </returns>
-		public JoystickButtonState GetButtonStateAt(JoystickButtonType type)
+		public ButtonState GetButtonStateAt(JoystickButtonType type)
 		{
-			return (asd.JoystickButtonState)CoreInstance.GetButtonStateAt((asd.swig.JoystickButtonType)type);
+			return (asd.ButtonState)CoreInstance.GetButtonStateAt((asd.swig.JoystickButtonType)type);
 		}
 
 		/// <summary>
@@ -1779,9 +1771,9 @@ namespace asd {
 		/// </summary>
 		/// <param name="key"></param>
 		/// <returns>押し状態 </returns>
-		public KeyState GetKeyState(Keys key)
+		public ButtonState GetKeyState(Keys key)
 		{
-			return (asd.KeyState)CoreInstance.GetKeyState((asd.swig.Keys)key);
+			return (asd.ButtonState)CoreInstance.GetKeyState((asd.swig.Keys)key);
 		}
 
 	}
@@ -2346,6 +2338,74 @@ namespace asd {
 
 
 	/// <summary>
+	/// 映像ファイルを再生するためのクラス 
+	/// </summary>
+	public partial class MediaPlayer
+	{
+		internal asd.swig.MediaPlayer CoreInstance { get; set; }
+
+		/// <summary>
+		/// 読み込んだ映像の大きさを取得する。
+		/// </summary>
+		public asd.Vector2DI Size
+		{
+			get { return CoreInstance.GetSize(); }
+		}
+
+		/// <summary>
+		/// 現在再生中の映像のフレーム番号を取得する。
+		/// </summary>
+		public int CurrentFrame
+		{
+			get { return CoreInstance.GetCurrentFrame(); }
+		}
+
+
+		/// <summary>
+		/// 映像を再生する。 
+		/// </summary>
+		/// <param name="isLoopingMode">ループ再生するか? </param>
+		/// <returns></returns>
+		public bool Play(bool isLoopingMode)
+		{
+			return CoreInstance.Play(isLoopingMode);
+		}
+
+		/// <summary>
+		/// 映像を読み込む。 
+		/// </summary>
+		/// <param name="path">ファイルのパス </param>
+		/// <returns></returns>
+		/// <remarks>
+		/// H264を推奨する。 
+		/// </remarks>
+		public bool Load(string path)
+		{
+			return CoreInstance.Load(path);
+		}
+
+		/// <summary>
+		/// 現在の映像をテクスチャに書き込む。 
+		/// </summary>
+		/// <param name="target">書き込み先 </param>
+		/// <returns></returns>
+		/// <remarks>
+		/// 映像とテクスチャの解像度は等しい必要がある。 
+		/// </remarks>
+		public bool WriteToTexture2D(Texture2D target)
+		{
+			asd.swig.Texture2D targetCore = null;
+			if(target != null)
+			{
+				targetCore = target.CoreInstance;
+			}
+			return CoreInstance.WriteToTexture2D(targetCore);
+		}
+
+	}
+
+
+	/// <summary>
 	/// 3Dメッシュのクラス 
 	/// </summary>
 	public partial class Mesh
@@ -2550,9 +2610,9 @@ namespace asd {
 		/// </summary>
 		/// <param name="mouseButton"></param>
 		/// <returns></returns>
-		public MouseButtonState GetButtonInputState(MouseButtons mouseButton)
+		public ButtonState GetButtonInputState(MouseButtons mouseButton)
 		{
-			return (asd.MouseButtonState)CoreInstance.GetButtonInputState((asd.swig.MouseButtons)mouseButton);
+			return (asd.ButtonState)CoreInstance.GetButtonInputState((asd.swig.MouseButtons)mouseButton);
 		}
 
 	}
@@ -2873,6 +2933,14 @@ namespace asd {
 		public bool IsInPackage
 		{
 			get { return CoreInstance.GetIsInPackage(); }
+		}
+
+		/// <summary>
+		/// ファイルの非同期読み込みの進捗を取得する。
+		/// </summary>
+		public LoadState LoadState
+		{
+			get { return (asd.LoadState)CoreInstance.GetLoadState(); }
 		}
 
 
@@ -3403,7 +3471,7 @@ namespace asd {
 		/// </summary>
 		/// <param name="label">ラベル名 </param>
 		/// <param name="shortcut">ショートカット </param>
-		/// <param name="p_selected"></param>
+		/// <param name="p_selected">選択されているか? </param>
 		/// <returns></returns>
 		public bool MenuItem(string label, string shortcut, bool[] p_selected)
 		{
@@ -3503,10 +3571,10 @@ namespace asd {
 		/// <summary>
 		/// ダイアログを表示する。 
 		/// </summary>
-		/// <param name="message"></param>
-		/// <param name="title"></param>
-		/// <param name="style"></param>
-		/// <param name="buttons"></param>
+		/// <param name="message">メッセージ </param>
+		/// <param name="title">タイトル </param>
+		/// <param name="style">ダイアログの種類 </param>
+		/// <param name="buttons">ボタンの種類 </param>
 		/// <returns></returns>
 		public ToolDialogSelection ShowDialog(string message, string title, ToolDialogStyle style, ToolDialogButtons buttons)
 		{
